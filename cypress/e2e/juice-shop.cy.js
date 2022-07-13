@@ -70,25 +70,30 @@ describe("Juice-shop with Auto login", () => {
     SearchPage.selectProduct.click();
     SearchPage.Validation.should('contain.text', 'Sour but full of vitamins.');
   });
-
-  // Create scenario - Search 500ml and validate Lemon, while having multiple cards
-  // Click on search icon
-  // Search for 500ml
-  // Select a product card - Lemon Juice (500ml)
-  // Validate that the card (should) contains "Sour but full of vitamins."
-
-  // Create scenario - Search 500ml and validate cards
-  // Click on search icon
-  // Search for 500ml
-  // Select a product card - Eggfruit Juice (500ml)
-  // Validate that the card (should) contains "Now with even more exotic flavour."
-  // Close the card
-  // Select a product card - Lemon Juice (500ml)
-  // Validate that the card (should) contains "Sour but full of vitamins."
-  // Close the card
-  // Select a product card - Strawberry Juice (500ml)
-  // Validate that the card (should) contains "Sweet & tasty!"
-
+  
+describe("Validating search by Volume - 500ml", () => {// Create scenario - Search 500ml and validate cards
+  beforeEach(() => {
+    HomePage.visit();
+    HomePage.dismissButton.click();
+    HomePage.meWantItButton.click();
+  });
+  
+  it.only("Validating search by Volume - 500ml ", () => {  
+    JuiceVolumeSearch.searchButton.click();
+	JuiceVolumeSearch.searchField.should("be.visible").type("500ml{enter}");
+    JuiceVolumeSearch.selectProduct.click('Eggfruit Juice (500ml)');
+    JuiceVolumeSearch.validation.should('contain.text', 'Sour but full of vitamins.');
+    // Select a product card - Eggfruit Juice (500ml)
+    JuiceVolumeSearch.validation.should('contain.text', 'Now with even more exotic flavour.');// Validate that the card (should) contains "Now with even more exotic flavour."
+	JuiceVolumeSearch.closeCard.click();// Close the card
+	// Select a product card - Lemon Juice (500ml)
+	JuiceVolumeSearch.validation.should('contain.text', 'Sour but full of vitamins.'); // Validate that the card (should) contains "Sour but full of vitamins."
+	JuiceVolumeSearch.closeCard.click();// Close the card
+	// Select a product card - Strawberry Juice (500ml)
+	JuiceVolumeSearch.validation.should('contain.text', 'Sweet & tasty!'); // Validate that the card (should) contains "Sweet & tasty!"
+  });
+ });
+ 
   // Create scenario - Read a review
   // Click on search icon
   // Search for King
