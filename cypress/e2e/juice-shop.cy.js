@@ -1,6 +1,7 @@
 import HomePage from "../pageObjects/HomePage";
 import LoginPage from "../pageObjects/LoginPage";
 import RegistrationPage from "../pageObjects/RegistrationPage";
+import SearchPage from "../pageObjects/SearchPage";
 
 describe("Juice-shop without auto login", () => {
   beforeEach(() => {
@@ -10,32 +11,50 @@ describe("Juice-shop without auto login", () => {
   });
 
   it("Login", () => {
-    // Click Account button
-    // Click Login button
-    // Set email value to "demo"
-    // Set password value to "demo"
-    // Click Log in
-    // Click Account button
-    // Validate that "demo" account name appears in the menu section
+    LoginPage.accountButton.click();
+    LoginPage.navLoginButton.click();
+    LoginPage.emailBox.type('demo');
+    LoginPage.passwordBox.type('demo');
+    LoginPage.loginButton.click();
+    LoginPage.accountButton.click();
+    LoginPage.accountValidation.should('contain.text', 'demo' );
+  });
+});
+
+describe("Juice shop registration", () => {
+  beforeEach(() => {
+    HomePage.visit();
+    HomePage.dismissButton.click();
+    HomePage.meWantItButton.click();
   });
 
   it("Registration", () => {
-    // Click Account button
-    // Login button
-    // Click "Not yet a customer?"
-    // Find - how to generate random number in JS
-    // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
-    // Save that email address to some variable
-    // Fill in password field and repeat password field with same password
-    // Click on Security Question menu
-    // Select  "Name of your favorite pet?"
-    // Fill in answer
-    // Click Register button
-    // Set email value to previously created email
-    // Set password value to previously used password value
-    // Click login button
-    // Click Account button
-    // Validate that account name (with previously created email address) appears in the menu section
+
+    //Creating new account
+    RegistrationPage.accountButton.click();
+    RegistrationPage.navLoginButton.click();
+    RegistrationPage.notYetACustomerButton.click();
+    var chars = '1234567890';
+    var email = 'email_';
+      for(var ii=0; ii<4; ii++){
+        email += chars[Math.floor(Math.random() * chars.length)];
+    }
+    email += '@ebox.com';
+     RegistrationPage.emailBox.type(email);
+
+    RegistrationPage.passwordBox.type('password');
+    RegistrationPage.passwordBoxRepeat.type('password');
+    RegistrationPage.securityQuestionBox.click();
+    RegistrationPage.menuOptions.contains("Name of your favorite pet?").click();
+    RegistrationPage.fillAnswer.type('Cat');
+    RegistrationPage.registrationButton.click();
+
+    //Log in new account
+    RegistrationPage.loginEmailBox.type(email);
+    RegistrationPage.loginPasswordBox.type('password');
+    RegistrationPage.loginButton.click();
+    RegistrationPage.accountButton.click();
+    RegistrationPage.accountValidation.should('contain.text', email );
   });
 });
 
@@ -45,11 +64,11 @@ describe("Juice-shop with Auto login", () => {
     HomePage.visit();
   });
 
-  it("Search and validate Lemon", () => {
-    // Click on search icon
-    // Search for Lemon
-    // Select a product card - Lemon Juice (500ml)
-    // Validate that the card (should) contains "Sour but full of vitamins."
+  it.only("Search and validate Lemon", () => {
+    SearchPage.searchButton.click();
+    SearchPage.searchField.should("be.visible").type("Lemon{enter}");
+    SearchPage.selectProduct.click();
+    SearchPage.Validation.should('contain.text', 'Sour but full of vitamins.');
   });
 
   // Create scenario - Search 500ml and validate Lemon, while having multiple cards
